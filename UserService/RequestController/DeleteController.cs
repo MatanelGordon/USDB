@@ -1,8 +1,8 @@
 ﻿using Common.Models;
-using Localos.PayloadController.Abstraction;
-using Localos.Storage.Abstraction;
+using USDB.PayloadController.Abstraction;
+using USDB.Storage.Abstraction;
 
-namespace Localos.PayloadController;
+namespace USDB.PayloadController;
 
 internal class DeleteController : IRequestController
 {

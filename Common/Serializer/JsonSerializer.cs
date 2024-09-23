@@ -1,7 +1,7 @@
 ﻿using Common.Serializer.Abstraction;
 
 
-namespace Localos.Serializer;
+namespace USDB.Serializer;
 
 public class JsonSerializer : ISerializer
 {

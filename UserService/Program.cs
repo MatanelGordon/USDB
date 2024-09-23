@@ -4,16 +4,15 @@ using Common.Compression.Abstraction;
 using Common.Protocol;
 using Common.Protocol.Abstraction;
 using Common.Serializer.Abstraction;
-using Localos;
-using Localos.Communication;
-using Localos.Communication.Abstraction;
-using Localos.Serializer;
-using Localos.Storage;
-using Localos.Storage.Abstraction;
+using USDB;
+using USDB.Communication;
+using USDB.Communication.Abstraction;
+using USDB.Serializer;
+using USDB.Storage;
+using USDB.Storage.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
 
 var builder = Host.CreateDefaultBuilder(args);
 

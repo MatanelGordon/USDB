@@ -1,6 +1,6 @@
-﻿using Localos.Storage.Abstraction;
+﻿using USDB.Storage.Abstraction;
 
-namespace Localos.Storage;
+namespace USDB.Storage;
 
 internal class MemoryStorage(long limit) : IStorage
 {

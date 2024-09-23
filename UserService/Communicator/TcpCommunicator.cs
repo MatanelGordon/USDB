@@ -1,12 +1,12 @@
 ﻿using Common.Models;
 using Common.Protocol.Abstraction;
 using Common.Serializer.Abstraction;
-using Localos.Communication.Abstraction;
+using USDB.Communication.Abstraction;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Localos.Communication;
+namespace USDB.Communication;
 
 class TcpCommunicator(
     ISerializer serializer,

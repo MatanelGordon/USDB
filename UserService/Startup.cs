@@ -1,9 +1,9 @@
-﻿using Localos.Communication.Abstraction;
-using Localos.RequestController;
-using Localos.Storage.Abstraction;
+﻿using USDB.Communication.Abstraction;
+using USDB.RequestController;
+using USDB.Storage.Abstraction;
 using Microsoft.Extensions.Hosting;
 
-namespace Localos;
+namespace USDB;
 
 internal class Startup(ICommunicator communicator, IStorage storage) : IHostedService
 {

@@ -1,4 +1,4 @@
-﻿namespace Localos.Storage.Abstraction;
+﻿namespace USDB.Storage.Abstraction;
 
 internal interface IStorage: IDisposable
 {

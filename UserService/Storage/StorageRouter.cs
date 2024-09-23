@@ -1,7 +1,7 @@
-﻿using Localos.Storage.Abstraction;
+﻿using USDB.Storage.Abstraction;
 using Microsoft.Extensions.Options;
 
-namespace Localos.Storage;
+namespace USDB.Storage;
 
 internal class StorageRouter : IStorage
 {

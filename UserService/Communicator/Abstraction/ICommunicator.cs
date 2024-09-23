@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace Localos.Communication.Abstraction;
+namespace USDB.Communication.Abstraction;
 
 public interface ICommunicator: IDisposable
 {

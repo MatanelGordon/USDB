@@ -1,9 +1,9 @@
 ﻿using Common.Models;
-using Localos.PayloadController;
-using Localos.PayloadController.Abstraction;
-using Localos.Storage.Abstraction;
+using USDB.PayloadController;
+using USDB.PayloadController.Abstraction;
+using USDB.Storage.Abstraction;
 
-namespace Localos.RequestController;
+namespace USDB.RequestController;
 
 internal class MainController : IRequestController
 {

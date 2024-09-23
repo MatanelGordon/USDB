@@ -1,4 +1,4 @@
-﻿namespace Localos;
+﻿namespace USDB;
 
 internal record ConfigSchema
 {

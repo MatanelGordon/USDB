@@ -1,7 +1,7 @@
 ﻿using Common.Models;
-using Localos.Storage.Abstraction;
+using USDB.Storage.Abstraction;
 
-namespace Localos.PayloadController.Abstraction;
+namespace USDB.PayloadController.Abstraction;
 
 internal interface IRequestController
 {
