@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localos", "Localos\Localos.csproj", "{DEB68EEE-492B-4AFD-AD2D-F9DBBCB17502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\UserService.csproj", "{DEB68EEE-492B-4AFD-AD2D-F9DBBCB17502}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CNC", "CNC\CNC.csproj", "{D810508E-7C8E-46D2-9DC4-CAA80C41E07D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{ECCEE24F-5FA5-4E31-9A7D-BF21D77A6511}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalosTests", "LocalosTests\LocalosTests.csproj", "{02E1D45E-DBF4-4D25-B60D-821B6545D947}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UT", "UT\UT.csproj", "{02E1D45E-DBF4-4D25-B60D-821B6545D947}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

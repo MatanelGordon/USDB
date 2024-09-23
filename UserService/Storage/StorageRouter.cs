@@ -23,7 +23,7 @@ internal class StorageRouter : IStorage
         _fileStorage = new FileStorage(config.Value.Directory, config.Value.Limit);
         _memoryStorage = new MemoryStorage(config.Value.MemoryStorageLimit);
     }
-
+      
     public Task<bool> AddObject(string id, byte[] data, bool shouldOverride)
     {
         IStorage storage = data.Length > _switchLimit ? _fileStorage : _memoryStorage;
