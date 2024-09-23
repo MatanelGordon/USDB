@@ -1,8 +1,8 @@
 ﻿using Common.Models;
-using USDB.PayloadController.Abstraction;
-using USDB.Storage.Abstraction;
+using UserService.PayloadController.Abstraction;
+using UserService.Storage.Abstraction;
 
-namespace USDB.PayloadController;
+namespace UserService.PayloadController;
 
 internal class GetController : IRequestController
 {

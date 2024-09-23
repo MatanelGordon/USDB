@@ -1,32 +1,23 @@
-﻿using USDB.Storage.Abstraction;
+﻿using UserService.Storage.Abstraction;
 using Microsoft.Extensions.Options;
 
-namespace USDB.Storage;
+namespace UserService.Storage;
 
-internal class StorageRouter : IStorage
+internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorage, long switchLimit = 2_500_000)
+    : IStorage
 {
     private readonly Dictionary<string, IStorage> _router = new();
-    private readonly IStorage _fileStorage;
-    private readonly IStorage _memoryStorage;
-    private readonly long _switchLimit;
 
-    public StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorage, long switchLimit = 2_500_000)
+    public StorageRouter(IOptions<ConfigSchema> config, long switchLimit = 2_500_000) : this(
+        new FileStorage(config.Value.Directory, config.Value.Limit),
+        new MemoryStorage(config.Value.MemoryStorageLimit),
+        switchLimit)
     {
-        _switchLimit = switchLimit;
-        _fileStorage = fileStorage;
-        _memoryStorage = memoryStorage;
     }
 
-    public StorageRouter(IOptions<ConfigSchema> config, long switchLimit = 2_500_000)
-    {
-        _switchLimit = switchLimit;
-        _fileStorage = new FileStorage(config.Value.Directory, config.Value.Limit);
-        _memoryStorage = new MemoryStorage(config.Value.MemoryStorageLimit);
-    }
-      
     public Task<bool> AddObject(string id, byte[] data, bool shouldOverride)
     {
-        IStorage storage = data.Length > _switchLimit ? _fileStorage : _memoryStorage;
+        IStorage storage = data.Length > switchLimit ? fileStorage : memoryStorage;
 
         try
         {
@@ -35,11 +26,11 @@ internal class StorageRouter : IStorage
         }
         catch (Exception _)
         {
-            IStorage other = storage == _fileStorage ? _memoryStorage : _fileStorage;
+            IStorage other = storage == fileStorage ? memoryStorage : fileStorage;
 
             try
             {
-                _router[id] = storage;
+                _router[id] = other;
                 return storage.AddObject(id, data);
             }
             catch (Exception __)
@@ -52,21 +43,21 @@ internal class StorageRouter : IStorage
 
     public Task<bool> DeleteObject(string id)
     {
-        IStorage storage = _router[id];
+        var storage = _router[id];
         _router.Remove(id);
         return storage.DeleteObject(id);
     }
 
     public Task<byte[]?> GetObject(string id)
     {
-        IStorage storage = _router[id];
+        var storage = _router[id];
         return storage.GetObject(id);
     }
 
     public void Dispose()
     {
-        _fileStorage.Dispose();
-        _memoryStorage.Dispose();
+        fileStorage.Dispose();
+        memoryStorage.Dispose();
         _router.Clear();
     }
 }

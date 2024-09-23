@@ -1,9 +1,9 @@
-﻿using USDB.Communication.Abstraction;
-using USDB.RequestController;
-using USDB.Storage.Abstraction;
+﻿using UserService.Communicator.Abstraction;
+using UserService.RequestController;
+using UserService.Storage.Abstraction;
 using Microsoft.Extensions.Hosting;
 
-namespace USDB;
+namespace UserService;
 
 internal class Startup(ICommunicator communicator, IStorage storage) : IHostedService
 {

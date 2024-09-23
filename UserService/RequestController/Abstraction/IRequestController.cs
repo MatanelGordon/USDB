@@ -1,7 +1,7 @@
 ﻿using Common.Models;
-using USDB.Storage.Abstraction;
+using UserService.Storage.Abstraction;
 
-namespace USDB.PayloadController.Abstraction;
+namespace UserService.PayloadController.Abstraction;
 
 internal interface IRequestController
 {

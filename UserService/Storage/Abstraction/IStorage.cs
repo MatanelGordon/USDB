@@ -1,4 +1,4 @@
-﻿namespace USDB.Storage.Abstraction;
+﻿namespace UserService.Storage.Abstraction;
 
 internal interface IStorage: IDisposable
 {

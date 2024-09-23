@@ -1,12 +1,12 @@
 ﻿using Common.Models;
 using Common.Protocol.Abstraction;
 using Common.Serializer.Abstraction;
-using USDB.Communication.Abstraction;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Sockets;
+using UserService.Communicator.Abstraction;
 
-namespace USDB.Communication;
+namespace UserService.Communicator;
 
 class TcpCommunicator(
     ISerializer serializer,

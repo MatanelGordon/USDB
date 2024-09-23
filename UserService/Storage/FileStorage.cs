@@ -1,10 +1,10 @@
-﻿using USDB.Storage.Abstraction;
+﻿using UserService.Storage.Abstraction;
 
-namespace USDB.Storage;
+namespace UserService.Storage;
 
 internal class FileStorage(string directory, int sizeLimit) : IStorage
 {
-    public long Size { get; private set; } = 0;
+    public long Size { get; private set; }
 
     public async Task<bool> AddObject(string id, byte[] data, bool shouldOverride = false)
     {
@@ -22,7 +22,7 @@ internal class FileStorage(string directory, int sizeLimit) : IStorage
             throw new Exception($"File too big, size: {data.Length}B, remaining: {sizeLimitBytes - Size}B");
         }
 
-        using var file = File.OpenWrite(fullPath);
+        await using var file = File.OpenWrite(fullPath);
         // in case of override
         Size -= file.Length;
         file.SetLength(0);
@@ -68,7 +68,7 @@ internal class FileStorage(string directory, int sizeLimit) : IStorage
 
         if (!isExists) return null;
 
-        using var file = File.OpenRead(fullPath);
+        await using var file = File.OpenRead(fullPath);
         using var memstream = new MemoryStream();
 
         await file.CopyToAsync(memstream);

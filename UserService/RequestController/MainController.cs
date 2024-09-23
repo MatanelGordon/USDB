@@ -1,9 +1,9 @@
 ﻿using Common.Models;
-using USDB.PayloadController;
-using USDB.PayloadController.Abstraction;
-using USDB.Storage.Abstraction;
+using UserService.PayloadController;
+using UserService.PayloadController.Abstraction;
+using UserService.Storage.Abstraction;
 
-namespace USDB.RequestController;
+namespace UserService.RequestController;
 
 internal class MainController : IRequestController
 {

@@ -1,6 +1,6 @@
 ﻿using Common.Models;
 
-namespace USDB.Communication.Abstraction;
+namespace UserService.Communicator.Abstraction;
 
 public interface ICommunicator: IDisposable
 {

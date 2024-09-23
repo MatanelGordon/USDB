@@ -1,4 +1,4 @@
-﻿namespace USDB;
+﻿namespace UserService;
 
 internal record ConfigSchema
 {

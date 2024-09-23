@@ -1,6 +1,6 @@
-﻿using USDB.Storage.Abstraction;
+﻿using UserService.Storage.Abstraction;
 
-namespace USDB.Storage;
+namespace UserService.Storage;
 
 internal class MemoryStorage(long limit) : IStorage
 {
