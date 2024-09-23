@@ -1,0 +1,12 @@
+{
+  "Config": {
+    "Directory": "C:\\temp\\localos",
+    "Limit": 2048,
+    "MemoryStorageLimit":  1024,
+    "Port": 6969,
+    "Address": "127.0.0.1"
+  },
+  "Compression": {
+    "Level": 14
+  }
+}

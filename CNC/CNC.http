@@ -1,0 +1,6 @@
+@CNC_HostAddress = http://localhost:5114
+
+GET {{CNC_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
