@@ -4,18 +4,19 @@ using Common.Models;
 using Common.Protocol;
 using Common.Protocol.Abstraction;
 using Common.Serializer.Abstraction;
-using Localos;
-using Localos.Communication;
-using Localos.Communication.Abstraction;
-using Localos.RequestController;
-using Localos.RequestController.Abstraction;
-using Localos.Serializer;
-using Localos.Storage;
-using Localos.Storage.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using UserService;
+using UserService.Communicator;
+using UserService.Communicator.Abstraction;
 using UserService.Config;
+using UserService.PayloadController;
+using UserService.RequestController;
+using UserService.RequestController.Abstraction;
+using UserService.Serializer;
+using UserService.Storage;
+using UserService.Storage.Abstraction;
 
 var builder = Host.CreateDefaultBuilder(args);
 

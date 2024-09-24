@@ -7,7 +7,7 @@
     "Address": "127.0.0.1"
   },
   "DB": {
-    "Directory": "C:\\temp\\localos",
+    "Directory": "C:\\temp\\usdb",
     "Limit": 2048,
     "MemoryStorageLimit": 1024
   },

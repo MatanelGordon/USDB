@@ -1,9 +1,9 @@
-﻿using Localos.Communication.Abstraction;
-using Localos.RequestController;
-using Localos.Storage.Abstraction;
+﻿using UserService.Communicator.Abstraction;
+using UserService.RequestController;
+using UserService.Storage.Abstraction;
 using Microsoft.Extensions.Hosting;
 
-namespace Localos;
+namespace UserService;
 
 internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage) : IHostedService
 {
@@ -11,7 +11,7 @@ internal class Startup(ICommunicator communicator, MainController mainController
     {
         Console.WriteLine("Started Startup Service");
 
-        communicator.OnRequest += (request, sender) => mainController.Handle(request, sender, storage);
+        communicator.OnRequest += payload => mainController.Handle(payload, storage);
         await communicator.Listen();
 
     }

@@ -1,9 +1,9 @@
 ﻿using Common.Models;
-using Localos.RequestController.Abstraction;
-using Localos.Storage.Abstraction;
+using UserService.RequestController.Abstraction;
+using UserService.Storage.Abstraction;
 using UserService.Communicator.Model;
 
-namespace Localos.RequestController;
+namespace UserService.RequestController;
 
 internal class MainController : IRequestController
 {

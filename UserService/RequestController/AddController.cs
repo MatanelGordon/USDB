@@ -1,12 +1,12 @@
-﻿using Common.Models;
-using Localos.PayloadController.Abstraction;
-using Localos.Storage.Abstraction;
+﻿using UserService.Communicator.Model;
+using UserService.RequestController.Abstraction;
+using UserService.Storage.Abstraction;
 
-namespace Localos.PayloadController;
+namespace UserService.PayloadController;
 
 internal class AddController : IRequestController
 {
-    public Task Handle(RequestSchema request, IStorage storage)
+    public Task Handle(OnRequestPayload payload, IStorage storage)
     {
         throw new NotImplementedException();
     }

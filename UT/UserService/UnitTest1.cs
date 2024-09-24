@@ -1,4 +1,4 @@
-namespace LocalosTests;
+namespace UT;
 
 public class Storage
 {

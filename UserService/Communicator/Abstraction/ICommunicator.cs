@@ -1,7 +1,7 @@
 ﻿using Common.Models;
 using UserService.Communicator.Model;
 
-namespace Localos.Communication.Abstraction;
+namespace UserService.Communicator.Abstraction;
 
 public interface ICommunicator: IDisposable
 {

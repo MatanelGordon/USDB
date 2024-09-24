@@ -1,8 +1,8 @@
 ﻿using Common.Models;
-using Localos.Storage.Abstraction;
+using UserService.Storage.Abstraction;
 using UserService.Communicator.Model;
 
-namespace Localos.RequestController.Abstraction;
+namespace UserService.RequestController.Abstraction;
 
 internal interface IRequestController
 {
