@@ -5,4 +5,5 @@ public enum RequestMethod
     ADD,
     GET,
     DELETE,
+    REGISTER
 }

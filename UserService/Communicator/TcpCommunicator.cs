@@ -5,18 +5,20 @@ using Localos.Communication.Abstraction;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Sockets;
+using UserService.Communicator.Model;
+using UserService.Config;
 
 namespace Localos.Communication;
 
 class TcpCommunicator(
     ISerializer serializer,
     IProtocol protocol,
-    IOptions<ConfigSchema> config
+    IOptions<NetworkConfigSchema> config
     ) : ICommunicator
 {
     private readonly CancellationTokenSource cancellationToken = new();
 
-    public event Func<RequestSchema, Task>? OnRequest;
+    public event Func<OnRequestPayload, Task>? OnRequest;
 
     public void Dispose()
     {
@@ -49,21 +51,38 @@ class TcpCommunicator(
     private async Task HandleClientAsync(TcpClient client)
     {
         var stream = client.GetStream();
+        var sendFunc = CreateSender(stream);
 
         while (true)
         {
             if (!client.Connected) return;
 
             var rawData = await protocol.Unwrap(stream);
-            var payload = await serializer.Deserialize<RequestSchema>(rawData);
+            var request = await serializer.Deserialize<RequestSchema>(rawData);
 
-            if (payload is null)
+            if (request is null)
             {
                 Console.WriteLine("Error Deserializing payload data");
                 continue;
             }
 
+            var payload = new OnRequestPayload
+            {
+                Request = request,
+                Send = sendFunc
+            };
+
             OnRequest?.Invoke(payload);
         }
+    }
+
+    private Func<ResponseSchema, Task> CreateSender(NetworkStream netStream)
+    {
+        return async req =>
+        {
+            var data = await serializer.Serialize(req);
+            var wrappedData = protocol.Wrap(data);
+            await netStream.WriteAsync(wrappedData);
+        };
     }
 }

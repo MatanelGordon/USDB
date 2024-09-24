@@ -1,9 +1,10 @@
 ﻿using Common.Models;
 using Localos.Storage.Abstraction;
+using UserService.Communicator.Model;
 
-namespace Localos.PayloadController.Abstraction;
+namespace Localos.RequestController.Abstraction;
 
 internal interface IRequestController
 {
-    Task Handle(RequestSchema request, IStorage storage);
+    Task Handle(OnRequestPayload payload, IStorage storage);
 }

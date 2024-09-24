@@ -1,7 +1,7 @@
 ﻿using Common.Models;
-using Localos.PayloadController;
-using Localos.PayloadController.Abstraction;
+using Localos.RequestController.Abstraction;
 using Localos.Storage.Abstraction;
+using UserService.Communicator.Model;
 
 namespace Localos.RequestController;
 
@@ -14,18 +14,8 @@ internal class MainController : IRequestController
         _mapping = mapping;
     }
 
-    public MainController()
+    public Task Handle(OnRequestPayload payload, IStorage storage)
     {
-        _mapping = new Dictionary<RequestMethod, IRequestController>()
-        {
-            [RequestMethod.ADD] = new AddController(),
-            [RequestMethod.DELETE] = new DeleteController(),
-            [RequestMethod.GET] = new GetController(),
-        };
-    }
-
-    public Task Handle(RequestSchema request, IStorage storage)
-    {
-        return _mapping[request.Method].Handle(request, storage);
+        return _mapping[payload.Request.Method].Handle(payload, storage);
     }
 }

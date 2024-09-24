@@ -5,14 +5,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace Localos;
 
-internal class Startup(ICommunicator communicator, IStorage storage) : IHostedService
+internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Started Startup Service");
-        var mainController = new MainController();
 
-        communicator.OnRequest += request => mainController.Handle(request, storage);
+        communicator.OnRequest += (request, sender) => mainController.Handle(request, sender, storage);
         await communicator.Listen();
 
     }

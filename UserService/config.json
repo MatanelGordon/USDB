@@ -1,12 +1,17 @@
 {
-  "Config": {
-    "Directory": "C:\\temp\\localos",
-    "Limit": 2048,
-    "MemoryStorageLimit":  1024,
+  "Compression": {
+    "Level": 14
+  },
+  "Network": {
     "Port": 6969,
     "Address": "127.0.0.1"
   },
-  "Compression": {
-    "Level": 14
+  "DB": {
+    "Directory": "C:\\temp\\localos",
+    "Limit": 2048,
+    "MemoryStorageLimit": 1024
+  },
+  "Identity": {
+    "Name":  "MyName"
   }
 }

@@ -4,11 +4,11 @@ using ZstdNet;
 
 namespace Common.Compression;
 
-public class ZstdCompression(IOptions<CompressionConfigSchema> compressionOptions) : ICompression
+public class ZstdCompression(int level) : ICompression
 {
     public Task<byte[]> Compress(byte[] data)
     {
-        using var zstdOptions = new CompressionOptions(compressionOptions.Value.Level);
+        using var zstdOptions = new CompressionOptions(level);
         using var zstd = new Compressor(zstdOptions);
         return Task.FromResult(zstd.Wrap(data));
     }
