@@ -1,5 +1,6 @@
 ﻿using UserService.Storage.Abstraction;
 using Microsoft.Extensions.Options;
+using UserService.Config;
 
 namespace UserService.Storage;
 
@@ -8,7 +9,7 @@ internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorag
 {
     private readonly Dictionary<string, IStorage> _router = new();
 
-    public StorageRouter(IOptions<ConfigSchema> config, long switchLimit = 2_500_000) : this(
+    public StorageRouter(IOptions<DBConfigSchema> config, long switchLimit = 2_500_000) : this(
         new FileStorage(config.Value.Directory, config.Value.Limit),
         new MemoryStorage(config.Value.MemoryStorageLimit),
         switchLimit)
