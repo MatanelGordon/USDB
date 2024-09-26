@@ -1,6 +1,6 @@
 ﻿namespace UserService.Storage.Abstraction;
 
-internal interface IStorage: IDisposable
+public interface IStorage: IDisposable
 {
     Task<bool> AddObject(string id, byte[] data, bool shouldOverride = false);
     Task<byte[]?> GetObject(string id);

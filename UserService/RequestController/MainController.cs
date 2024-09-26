@@ -1,7 +1,6 @@
 ﻿using Common.Models;
 using UserService.RequestController.Abstraction;
-using UserService.Storage.Abstraction;
-using UserService.Communicator.Model;
+using UserService.RequestController.Model;
 
 namespace UserService.RequestController;
 
@@ -14,8 +13,8 @@ internal class MainController : IRequestController
         _mapping = mapping;
     }
 
-    public Task Handle(OnRequestPayload payload, IStorage storage)
+    public Task Handle(ControllerContext ctx)
     {
-        return _mapping[payload.Request.Method].Handle(payload, storage);
+        return _mapping[ctx.Request.Method].Handle(ctx);
     }
 }

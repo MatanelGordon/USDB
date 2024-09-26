@@ -1,31 +1,24 @@
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CNC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserServiceController : ControllerBase
+    public class UserServiceController(ILogger<UserServiceController> logger) : ControllerBase
     {
-
-        private readonly ILogger<UserServiceController> _logger;
-
-        public UserServiceController(ILogger<UserServiceController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpGet(Name = "GetObject")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("{user}",Name = "GetObject")]
+        public IActionResult Get(string user, [FromQuery] string id)
         {
             Log("Run Succeed");
-
-            
+            byte[] byteArray = Encoding.UTF8.GetBytes(id);
+            return File(byteArray, "application/octet-stream", $"{id}.bin");
         }
 
         private void Log(string message)
         {
             var now = DateTime.Now;
-            _logger.LogInformation($"[{now.ToShortDateString()} {now.ToShortTimeString()}]: {message}");
+            logger.LogInformation($"[{now.ToShortDateString()} {now.ToShortTimeString()}]: {message}");
         }
     }
 }

@@ -1,13 +1,11 @@
-﻿using Common.Models;
-using UserService.Communicator.Model;
-using UserService.RequestController.Abstraction;
-using UserService.Storage.Abstraction;
+﻿using UserService.RequestController.Abstraction;
+using UserService.RequestController.Model;
 
-namespace UserService.PayloadController;
+namespace UserService.RequestController;
 
 internal class DeleteController : IRequestController
 {
-    public Task Handle(OnRequestPayload payload, IStorage storage)
+    public Task Handle(ControllerContext ctx)
     {
         throw new NotImplementedException();
     }

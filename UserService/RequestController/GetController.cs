@@ -1,14 +1,36 @@
-﻿using Common.Models;
-using UserService.Communicator.Model;
+﻿using System.Text;
+using Common.Models;
 using UserService.RequestController.Abstraction;
-using UserService.Storage.Abstraction;
+using UserService.RequestController.Model;
 
-namespace UserService.PayloadController;
+namespace UserService.RequestController;
 
 internal class GetController : IRequestController
 {
-    public Task Handle(OnRequestPayload payload, IStorage storage)
+    public async Task Handle(ControllerContext ctx)
     {
-        throw new NotImplementedException();
+        ResponseSchema response;
+        try
+        {
+            var file = await ctx.Storage.GetObject(ctx.Request.Id);
+
+            response = new ResponseSchema()
+            {
+                ResponseStatus = file is null ? ResponseStatus.NotFound : ResponseStatus.Success,
+                Id = ctx.Request.Id,
+                Content = file ?? [],
+            };
+        }
+        catch (Exception e)
+        {
+            response = new ResponseSchema()
+            {
+                ResponseStatus = ResponseStatus.GeneralError,
+                Id = ctx.Request.Id,
+                Content = Encoding.UTF8.GetBytes(e.Message),
+            };
+        }
+        
+        await ctx.Send(response);
     }
 }

@@ -11,7 +11,6 @@ using UserService;
 using UserService.Communicator;
 using UserService.Communicator.Abstraction;
 using UserService.Config;
-using UserService.PayloadController;
 using UserService.RequestController;
 using UserService.RequestController.Abstraction;
 using UserService.Serializer;
@@ -53,16 +52,17 @@ builder.ConfigureServices((context, services) =>
     services.AddSingleton<ISerializer, JsonSerializer>();
     services.AddSingleton<IProtocol, DefaultProtocol>();
     services.AddSingleton<ICommunicator, TcpCommunicator>();
-    services.AddSingleton<RegisterContoller>();
+    services.AddSingleton<RegisterController>();
 
     services.AddSingleton<MainController>(services =>
     {
+        var compression = services.GetRequiredService<ICompression>();
         var mapping = new Dictionary<RequestMethod, IRequestController>()
         {
             [RequestMethod.GET] = new GetController(),
-            [RequestMethod.ADD] = new AddController(),
+            [RequestMethod.ADD] = new AddController(compression),
             [RequestMethod.DELETE] = new DeleteController(),
-            [RequestMethod.REGISTER] = services.GetRequiredService<RegisterContoller>()
+            [RequestMethod.REGISTER] = services.GetRequiredService<RegisterController>()
         };
 
         return new MainController(mapping);
