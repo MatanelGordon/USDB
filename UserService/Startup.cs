@@ -23,6 +23,7 @@ internal class Startup(ICommunicator communicator, MainController mainController
             
             return mainController.Handle(ctx);
         };
+        
         await communicator.Listen();
 
     }
