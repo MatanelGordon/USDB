@@ -21,7 +21,7 @@ internal class Startup(ICommunicator communicator, MainController mainController
                 Storage = storage
             };
             
-            return mainController.Handle(ctx);
+            return mainController.Handle(ctx);  
         };
         
         await communicator.Listen();

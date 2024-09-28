@@ -11,6 +11,9 @@ using UserService;
 using UserService.Communicator;
 using UserService.Communicator.Abstraction;
 using UserService.Config;
+using UserService.HttpCNCService;
+using UserService.RegisterService;
+using UserService.RegisterService.Abstraction;
 using UserService.RequestController;
 using UserService.RequestController.Abstraction;
 using UserService.Serializer;
@@ -49,10 +52,11 @@ builder.ConfigureServices((context, services) =>
         return new ZstdCompression(level);
     });
 
+    services.AddSingleton<HttpCncService>();
     services.AddSingleton<ISerializer, JsonSerializer>();
     services.AddSingleton<IProtocol, DefaultProtocol>();
     services.AddSingleton<ICommunicator, TcpCommunicator>();
-    services.AddSingleton<RegisterController>();
+    services.AddSingleton<IRegisterService, HttpRegisterService>();
 
     services.AddSingleton<MainController>(services =>
     {
@@ -62,7 +66,6 @@ builder.ConfigureServices((context, services) =>
             [RequestMethod.GET] = new GetController(),
             [RequestMethod.ADD] = new AddController(compression),
             [RequestMethod.DELETE] = new DeleteController(),
-            [RequestMethod.REGISTER] = services.GetRequiredService<RegisterController>()
         };
 
         return new MainController(mapping);

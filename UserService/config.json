@@ -4,7 +4,11 @@
   },
   "Network": {
     "Port": 6969,
-    "Address": "127.0.0.1"
+    "Address": "127.0.0.1",
+    "CNC": {
+      "Port": 5000,
+      "Address": "127.0.0.1"
+    }
   },
   "DB": {
     "Directory": "C:\\temp\\usdb",
