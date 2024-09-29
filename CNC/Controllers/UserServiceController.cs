@@ -11,6 +11,11 @@ public class UserServiceController(UsersStorageService usersStorageService, ILog
     [HttpGet("Register")]
     public IActionResult Register(string user, int port)
     {
+        if (port <= 0 || port > 65535)
+        {
+            return StatusCode(400, $"Invalid Port: {port}. Valid Range: 0-65535");
+        }
+        
         var host = HttpContext.Request.Host.ToString();
         var result = usersStorageService.Register(user, host, port);
 
