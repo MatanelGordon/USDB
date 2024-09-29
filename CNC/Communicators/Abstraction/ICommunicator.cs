@@ -5,6 +5,6 @@ namespace CNC.Communicators.Abstraction
 {
     public interface ICommunicator
     {
-        Task<ResponseSchema> Send(string user, RequestSchema request, CommunicatorSendOptions? options);
+        Task<ResponseSchema> MakeRequest(string user, RequestSchema request, CommunicatorSendOptions? options);
     }
 }

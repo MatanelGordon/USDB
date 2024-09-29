@@ -3,26 +3,34 @@ using CNC.Communicators.Models;
 using CNC.Services;
 using Common.Models;
 using System.Net.Sockets;
+using Common.Protocol.Abstraction;
+using Common.Serializer.Abstraction;
 
 namespace CNC.Communicators;
 
-public class TcpCommunicator(UsersStorageService userStorage) : ICommunicator
+public class TcpCommunicator(UsersStorageService userStorage, ISerializer serializer, IProtocol protocol) : ICommunicator
 {
     private readonly Dictionary<string, TcpClient> _openConnections = new ();
 
-    public async Task<ResponseSchema> Send(string user, RequestSchema request, CommunicatorSendOptions? options)
+    public async Task<ResponseSchema> MakeRequest(string user, RequestSchema request, CommunicatorSendOptions? options)
     {
         var client = await Connect(user);
         var stream = client.GetStream();
 
-        var sentPayload = 
-        
+        var sentPayload = await serializer.Serialize(request);
+        sentPayload = protocol.Wrap(sentPayload);
+
+        await stream.WriteAsync(sentPayload);
+
+        var resultRaw = await protocol.Unwrap(stream);
+        var result = await serializer.Deserialize<ResponseSchema>(resultRaw);
         
         if (options is not null && !options.KeepAlive)
         {
-            client.Close();
-            _openConnections.Remove(user);
+            Disconnect(user);
         }
+
+        return result;
     }
 
     private async Task<TcpClient> Connect(string user)
