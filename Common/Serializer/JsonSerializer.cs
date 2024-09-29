@@ -1,7 +1,7 @@
 ﻿using Common.Serializer.Abstraction;
 
 
-namespace UserService.Serializer;
+namespace Common.Serializer;
 
 public class JsonSerializer : ISerializer
 {

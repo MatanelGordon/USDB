@@ -1,14 +1,12 @@
 ﻿using CNC.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace CNC.Controllers
 {
     [ApiController]
     [Route("Api/Object/[controller]")]
-    public class StorageController(UsersStorageService usersStorageService,ILogger<StorageController> logger) : ControllerBase
+    public class StorageController(UsersStorageService usersStorageService, ILogger<StorageController> logger) : ControllerBase
     {
         [HttpGet("{user}/{id}")]
         public IActionResult Get(string user, string id)

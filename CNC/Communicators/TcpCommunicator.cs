@@ -1,23 +1,58 @@
 ﻿using CNC.Communicators.Abstraction;
+using CNC.Communicators.Models;
+using CNC.Services;
 using Common.Models;
 using System.Net.Sockets;
 
-namespace CNC.Communicators
+namespace CNC.Communicators;
+
+public class TcpCommunicator(UsersStorageService userStorage) : ICommunicator
 {
-    public class TcpCommunicator() : ICommunicator
+    private readonly Dictionary<string, TcpClient> _openConnections = new ();
+
+    public async Task<ResponseSchema> Send(string user, RequestSchema request, CommunicatorSendOptions? options)
     {
-        public async Task<ResponseSchema> Send(RequestSchema request)
+        var client = await Connect(user);
+        var stream = client.GetStream();
+
+        var sentPayload = 
+        
+        
+        if (options is not null && !options.KeepAlive)
         {
-            throw new NotImplementedException();
+            client.Close();
+            _openConnections.Remove(user);
+        }
+    }
+
+    private async Task<TcpClient> Connect(string user)
+    {
+        if (_openConnections.ContainsKey(user))
+        {
+            return _openConnections[user];
         }
 
-        private async Task<TcpClient> Connect(string address, int port = 6969)
+        var connection = userStorage.GetRequiredHostByUser(user);
+
+        TcpClient client = new TcpClient();
+
+        await client.ConnectAsync(connection.Host, connection.Port);
+
+        _openConnections.Add(user, client);
+
+        return client;
+    }
+
+    private void Disconnect(string user)
+    {
+        if (!_openConnections.ContainsKey(user))
         {
-            TcpClient client = new TcpClient();
-
-            await client.ConnectAsync(address, port);
-
-            return client;
+            throw new Exception($"Could not find openConnection for user {user}");
         }
+
+        var client = _openConnections[user];
+
+        client.Close();
+        _openConnections.Remove(user);
     }
 }

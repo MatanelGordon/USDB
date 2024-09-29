@@ -1,4 +1,8 @@
 using CNC.Services;
+using Common.Protocol;
+using Common.Protocol.Abstraction;
+using Common.Serializer;
+using Common.Serializer.Abstraction;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +13,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<UsersStorageService>();
+builder.Services.AddSingleton<IProtocol, DefaultProtocol>();
+builder.Services.AddSingleton<ISerializer, JsonSerializer>();
+
 
 var app = builder.Build();
 

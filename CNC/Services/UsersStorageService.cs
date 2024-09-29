@@ -1,20 +1,39 @@
-﻿namespace CNC.Services
+﻿using CNC.Models;
+
+namespace CNC.Services
 {
     public class UsersStorageService(ILogger<UsersStorageService> logger)
     {
-        private readonly Dictionary<string, HostString> _registeredUsers = new();
+        private readonly Dictionary<string, ToolConnectionString> _registeredUsers = new();
 
         public bool Exists(string user) => _registeredUsers.ContainsKey(user);
 
-        public HostString? GetHostByUser(string user)
+        public ToolConnectionString? GetHostByUser(string user)
         {
             _registeredUsers.TryGetValue(user, out var host);
             return host;
         }
 
+        /// <summary>
+        /// Acts like GetHostByUser, except it throws an error if not found.
+        /// </summary>
+        /// <param name="user">Registered Tool Identity</param>
+        /// <returns>Connection string (Host + Port)</returns
+        public ToolConnectionString GetRequiredHostByUser(string user)
+        {
+            var answer = GetHostByUser(user);
+
+            if (answer is null)
+            {
+                throw new KeyNotFoundException($"Required user {user} not found in storage");
+            }
+
+            return answer;
+        }
+
         public bool Register(string user, string host, int port)
         {
-            if (!_registeredUsers.TryAdd(user, new HostString(host, port)))
+            if (!_registeredUsers.TryAdd(user, new ToolConnectionString(host, port)))
             {
                 logger.LogError($"Unsuccessful Registration - {user}");
                 return false;
