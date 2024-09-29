@@ -2,29 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
-namespace CNC.Controllers
+namespace CNC.Controllers;
+
+[ApiController]
+[Route("Api/Object/[controller]")]
+public class StorageController(UsersStorageService usersStorageService, ILogger<StorageController> logger)
+    : ControllerBase
 {
-    [ApiController]
-    [Route("Api/Object/[controller]")]
-    public class StorageController(UsersStorageService usersStorageService, ILogger<StorageController> logger) : ControllerBase
+    [HttpGet("{user}/{id}")]
+    public IActionResult Get(string user, string id)
     {
-        [HttpGet("{user}/{id}")]
-        public IActionResult Get(string user, string id)
+        if (!usersStorageService.Exists(user))
         {
-            if (!usersStorageService.Exists(user))
-            {
-                return NotFound($"User {user} was not found");
-            }
-
-            Log("Run Succeed");
-            byte[] byteArray = Encoding.UTF8.GetBytes(id);
-            return File(byteArray, "application/octet-stream", $"{id}.bin");
+            return NotFound($"User {user} was not found");
         }
 
-        private void Log(string message)
-        {
-            var now = DateTime.Now;
-            logger.LogInformation($"[{now.ToShortDateString()} {now.ToShortTimeString()}]: {message}");
-        }
+        Log("Run Succeed");
+        byte[] byteArray = Encoding.UTF8.GetBytes(id);
+        return File(byteArray, "application/octet-stream", $"{id}.bin");
+    }
+
+    private void Log(string message)
+    {
+        var now = DateTime.Now;
+        logger.LogInformation($"[{now.ToShortDateString()} {now.ToShortTimeString()}]: {message}");
     }
 }
