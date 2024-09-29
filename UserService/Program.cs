@@ -11,7 +11,7 @@ using UserService;
 using UserService.Communicator;
 using UserService.Communicator.Abstraction;
 using UserService.Config;
-using UserService.HttpCNCService;
+using UserService.Cnc;
 using UserService.RegisterService;
 using UserService.RegisterService.Abstraction;
 using UserService.RequestController;
@@ -60,11 +60,11 @@ builder.ConfigureServices((context, services) =>
 
     services.AddSingleton<MainController>(services =>
     {
-        var compression = services.GetRequiredService<ICompression>();
+        var compressionService = services.GetRequiredService<ICompression>();
         var mapping = new Dictionary<RequestMethod, IRequestController>()
         {
             [RequestMethod.GET] = new GetController(),
-            [RequestMethod.ADD] = new AddController(compression),
+            [RequestMethod.ADD] = new AddController(compressionService),
             [RequestMethod.DELETE] = new DeleteController(),
         };
 

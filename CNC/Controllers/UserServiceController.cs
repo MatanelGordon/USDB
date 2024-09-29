@@ -1,4 +1,3 @@
-using System.Text;
 using CNC.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,14 +5,15 @@ namespace CNC.Controllers
 {
     
     [ApiController]
-    [Route("Api/User/[controller]")]
+    [Route("Api/[controller]")]
     public class UserServiceController(UsersStorageService usersStorageService,ILogger<UserServiceController> logger) : ControllerBase
     {
 
         [HttpGet("Register")]
-        public IActionResult Register(string user)
+        public IActionResult Register(string user, int port)
         {
-            var result = usersStorageService.Register(user);
+            var host = HttpContext.Request.Host.ToString();
+            var result = usersStorageService.Register(user, host, port);
 
             if (!result)
             {
@@ -21,8 +21,8 @@ namespace CNC.Controllers
                 return StatusCode(500, $"Could not register {user}");
             }
             
-            Log($"Successful Registration - {user}");
-            return Ok($"User {user} has been registered");
+            Log($"Successful Registration - {user} [{host}]");
+            return Ok($"User {user} [{host}] has been registered");
         }
 
         [HttpGet("Unregister")]
@@ -44,7 +44,7 @@ namespace CNC.Controllers
         public IActionResult ClearAll()
         {
             usersStorageService.Clear();
-            return Ok($"User Storage has been cleared");
+            return Ok("User Storage has been cleared");
         }
 
         private void Log(string message)

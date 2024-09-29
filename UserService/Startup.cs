@@ -2,11 +2,12 @@
 using UserService.RequestController;
 using UserService.Storage.Abstraction;
 using Microsoft.Extensions.Hosting;
+using UserService.RegisterService.Abstraction;
 using UserService.RequestController.Model;
 
 namespace UserService;
 
-internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage) : IHostedService
+internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage, IRegisterService registerService) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -24,6 +25,8 @@ internal class Startup(ICommunicator communicator, MainController mainController
             return mainController.Handle(ctx);  
         };
         
+        // Registers To CNC
+        _ = registerService.Register();
         await communicator.Listen();
 
     }

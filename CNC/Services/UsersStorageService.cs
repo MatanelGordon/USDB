@@ -2,26 +2,31 @@
 {
     public class UsersStorageService(ILogger<UsersStorageService> logger)
     {
-        private readonly HashSet<string> _registeredUsers = new();
+        private readonly Dictionary<string, HostString> _registeredUsers = new();
 
-        public bool Exists(string user) => _registeredUsers.Contains(user);
+        public bool Exists(string user) => _registeredUsers.ContainsKey(user);
 
-        public bool Register(string user)
+        public HostString? GetHostByUser(string user)
         {
-            if (_registeredUsers.Contains(user))
+            _registeredUsers.TryGetValue(user, out var host);
+            return host;
+        }
+
+        public bool Register(string user, string host, int port)
+        {
+            if (!_registeredUsers.TryAdd(user, new HostString(host, port)))
             {
                 logger.LogError($"Unsuccessful Registration - {user}");
                 return false;
             }
 
-            _registeredUsers.Add(user);
             logger.LogInformation($"Successful Registration - {user}");
             return true;
         }
 
         public bool Unregister(string user)
         {
-            if (!_registeredUsers.Contains(user))
+            if (!_registeredUsers.ContainsKey(user))
             {
                 logger.LogError($"Unsuccessful Unregistration - {user}");
                 return false;
