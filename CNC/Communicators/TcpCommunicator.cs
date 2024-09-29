@@ -35,9 +35,9 @@ public class TcpCommunicator(UsersStorageService userStorage, ISerializer serial
 
     private async Task<TcpClient> Connect(string user)
     {
-        if (_openConnections.ContainsKey(user))
+        if (_openConnections.TryGetValue(user, out var existingConnection))
         {
-            return _openConnections[user];
+            return existingConnection;
         }
 
         var connection = userStorage.GetRequiredHostByUser(user);
