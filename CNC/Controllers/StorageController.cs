@@ -2,6 +2,7 @@
 using CNC.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
+using System.Text.RegularExpressions;
 using CNC.Communicators.Abstraction;
 using Common.Compression.Abstraction;
 using Common.Models;
@@ -19,6 +20,13 @@ public class StorageController(UsersStorageService usersStorageService, ICommuni
         if (!usersStorageService.Exists(user))
         {
             return NotFound($"User {user} was not found");
+        }
+        
+        var validIdPattern = "^[a-zA-Z0-9_-]+$";
+        
+        if (!Regex.IsMatch(id, validIdPattern))
+        {
+            return StatusCode(400, $"Id contains invalid characters");
         }
 
         var request = new RequestSchema()
