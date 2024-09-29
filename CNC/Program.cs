@@ -1,4 +1,8 @@
+using CNC.Communicators;
+using CNC.Communicators.Abstraction;
 using CNC.Services;
+using Common.Compression;
+using Common.Compression.Abstraction;
 using Common.Protocol;
 using Common.Protocol.Abstraction;
 using Common.Serializer;
@@ -15,6 +19,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<UsersStorageService>();
 builder.Services.AddSingleton<IProtocol, DefaultProtocol>();
 builder.Services.AddSingleton<ISerializer, JsonSerializer>();
+builder.Services.AddSingleton<ICommunicator, TcpCommunicator>();
+builder.Services.AddSingleton<ICompression, ZstdCompression>();
 
 
 var app = builder.Build();

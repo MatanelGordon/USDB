@@ -1,25 +1,44 @@
-﻿using CNC.Services;
+﻿using System.Net;
+using CNC.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
+using CNC.Communicators.Abstraction;
+using Common.Compression.Abstraction;
+using Common.Models;
 
 namespace CNC.Controllers;
 
 [ApiController]
 [Route("Api/Object/[controller]")]
-public class StorageController(UsersStorageService usersStorageService, ILogger<StorageController> logger)
+public class StorageController(UsersStorageService usersStorageService, ICommunicator communicator, ICompression compression, ILogger<StorageController> logger)
     : ControllerBase
 {
     [HttpGet("{user}/{id}")]
-    public IActionResult Get(string user, string id)
+    public async Task<IActionResult> Get(string user, string id)
     {
         if (!usersStorageService.Exists(user))
         {
             return NotFound($"User {user} was not found");
         }
 
+        var request = new RequestSchema()
+        {
+            Id = id,
+            Method = RequestMethod.GET,
+            From = Dns.GetHostName(),
+        };
+
+        var result = await communicator.MakeRequest(user, request);
+
+        if (result.ResponseStatus != ResponseStatus.Success)
+        {
+            var message = Encoding.UTF8.GetString(result.Content);
+
+            return StatusCode(500, $"ResponseSchemaError: {message}");
+        }
+        
         Log("Run Succeed");
-        byte[] byteArray = Encoding.UTF8.GetBytes(id);
-        return File(byteArray, "application/octet-stream", $"{id}.bin");
+        return File(result.Content, "application/octet-stream", $"{result.Id}.{compression.Extension}");
     }
 
     private void Log(string message)
