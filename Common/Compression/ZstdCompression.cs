@@ -6,6 +6,8 @@ namespace Common.Compression;
 
 public class ZstdCompression(int level) : ICompression
 {
+    public string Extension { get; } = "zstd";
+    
     public Task<byte[]> Compress(byte[] data)
     {
         using var zstdOptions = new CompressionOptions(level);
