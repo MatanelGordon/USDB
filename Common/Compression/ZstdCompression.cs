@@ -4,8 +4,9 @@ using ZstdNet;
 
 namespace Common.Compression;
 
-public class ZstdCompression(int level) : ICompression
+public class ZstdCompression(int level = ZstdCompression.DefaultCompressionLevel) : ICompression
 {
+    const int DefaultCompressionLevel = 3;
     public string Extension { get; } = "zstd";
     
     public Task<byte[]> Compress(byte[] data)
