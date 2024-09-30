@@ -45,6 +45,7 @@ public class StorageController(UsersStorageService usersStorageService, ICommuni
             return StatusCode(500, $"ResponseSchemaError: {message}");
         }
         
+        // TODO: Add Decompression and MimeType Checker for Json XML and UTF8 and UTF16.        
         Log("Run Succeed");
         return File(result.Content, "application/octet-stream", $"{result.Id}.{compression.Extension}");
     }
