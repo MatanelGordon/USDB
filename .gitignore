@@ -8,6 +8,9 @@
 .vs/
 .idea/
 
+#Temp dir for development
+temp_dir/
+
 # Build results
 
 [Dd]ebug/

@@ -33,6 +33,12 @@ namespace CNC.Services
 
         public bool Register(string user, string host, int port)
         {
+            if (host.Contains(':'))
+            {
+                logger.LogError($"Unsuccessful Registration - {user} - host parameter contains ':' - {host}");
+                return false;
+            }
+            
             if (!_registeredUsers.TryAdd(user, new ToolConnectionString(host, port)))
             {
                 logger.LogError($"Unsuccessful Registration - {user}");

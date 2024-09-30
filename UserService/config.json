@@ -3,12 +3,13 @@
     "Port": 6969,
     "Address": "127.0.0.1",
     "CNC": {
-      "Port": 5000,
-      "Address": "127.0.0.1"
+      "Port": 5114,
+      "Address": "localhost",
+      "IsSecure": false
     }
   },
   "DB": {
-    "Directory": "C:\\temp\\usdb",
+    "Directory": "/Users/matanelgordon/Desktop/Projects/USDB/temp_dir",
     "Limit": 2048,
     "MemoryStorageLimit": 1024
   },

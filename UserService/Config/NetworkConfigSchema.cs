@@ -7,7 +7,13 @@ internal record NetworkSchema
 
 }
 
+internal record CncNetworkSchema : NetworkSchema
+{
+    public required bool IsSecure { get; init; }
+
+}
+
 internal record NetworkConfigSchema: NetworkSchema
 {
-    public required NetworkSchema CNC { get; set; }
+    public required CncNetworkSchema CNC { get; set; }
 }
