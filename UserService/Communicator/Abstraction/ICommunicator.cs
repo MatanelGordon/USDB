@@ -3,9 +3,9 @@ using UserService.Communicator.Model;
 
 namespace UserService.Communicator.Abstraction;
 
-public interface ICommunicator: IDisposable
+public interface ICommunicator
 {
     event Func<OnRequestPayload, Task>? OnRequest;
 
-    Task Listen();
+    Task Listen(CancellationToken cancellationToken);
 }

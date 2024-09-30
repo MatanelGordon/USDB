@@ -27,14 +27,12 @@ internal class Startup(ICommunicator communicator, MainController mainController
         
         // Registers To CNC
         _ = registerService.Register();
-        await communicator.Listen();
-
+        await communicator.Listen(cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("OK, Goodbye");
-        communicator.Dispose();
         return Task.CompletedTask;
     }
 }

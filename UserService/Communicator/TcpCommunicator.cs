@@ -14,31 +14,24 @@ class TcpCommunicator(
     ISerializer serializer,
     IProtocol protocol,
     IOptions<NetworkConfigSchema> config
-    ) : ICommunicator
+) : ICommunicator
 {
-    private readonly CancellationTokenSource cancellationToken = new();
-
     public event Func<OnRequestPayload, Task>? OnRequest;
 
-    public void Dispose()
-    {
-        cancellationToken.Cancel();
-    }
-
-    public async Task Listen()
+    public async Task Listen(CancellationToken cancellationToken)
     {
         try
         {
             Console.WriteLine($"Listening on {config.Value.Address}:{config.Value.Port}");
-            TcpListener listener = new TcpListener(IPAddress.Parse(config.Value.Address), config.Value.Port);
+            using var listener = new TcpListener(IPAddress.Parse(config.Value.Address), config.Value.Port);
 
             listener.Start();
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                var client = await listener.AcceptTcpClientAsync(cancellationToken.Token);
+                var client = await listener.AcceptTcpClientAsync(cancellationToken);
 
-                var _ = HandleClientAsync(client);
+                _ = HandleClientAsync(client);
             }
         }
         catch (Exception err)

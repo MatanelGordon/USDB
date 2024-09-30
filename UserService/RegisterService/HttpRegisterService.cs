@@ -14,7 +14,9 @@ internal class HttpRegisterService(HttpCncService cncHttp, IOptions<IdentityConf
         {
             var name = identityConfig.Value.Name;
             var port = netconfig.Value.Port;
-            await cncHttp.HttpClient.GetAsync($"/Api/UserService/Register?user={name}&port={port}");
+            logger.LogDebug($"Runnning /Api/UserService/Register?user={name}&port={port}");
+            var result = await cncHttp.Http.GetAsync($"/Api/UserService/Register?user={name}&port={port}");
+            result.EnsureSuccessStatusCode();
             logger.LogInformation($"Registration Completed as {name}");
         }
         catch (Exception ex)
