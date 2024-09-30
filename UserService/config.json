@@ -1,7 +1,4 @@
 {
-  "Compression": {
-    "Level": 14
-  },
   "Network": {
     "Port": 6969,
     "Address": "127.0.0.1",

@@ -32,8 +32,6 @@ builder.ConfigureAppConfiguration(app =>
 
 builder.ConfigureServices((context, services) =>
 {
-    var compression = context.Configuration.GetSection("Compression");
-    services.Configure<CompressionConfigSchema>(compression);
 
     var network = context.Configuration.GetSection("Network");
     services.Configure<NetworkConfigSchema>(network);
@@ -46,12 +44,6 @@ builder.ConfigureServices((context, services) =>
 
     services.AddSingleton<IStorage, StorageRouter>();
 
-    services.AddSingleton<ICompression, ZstdCompression>(services =>
-    {
-        var level = compression.GetValue<int>("Level");
-        return new ZstdCompression(level);
-    });
-
     services.AddSingleton<HttpCncService>();
     services.AddSingleton<ISerializer, JsonSerializer>();
     services.AddSingleton<IProtocol, DefaultProtocol>();
@@ -60,11 +52,10 @@ builder.ConfigureServices((context, services) =>
 
     services.AddSingleton<MainController>(services =>
     {
-        var compressionService = services.GetRequiredService<ICompression>();
         var mapping = new Dictionary<RequestMethod, IRequestController>()
         {
             [RequestMethod.GET] = new GetController(),
-            [RequestMethod.ADD] = new AddController(compressionService),
+            [RequestMethod.ADD] = new AddController(),
             [RequestMethod.DELETE] = new DeleteController(),
         };
 

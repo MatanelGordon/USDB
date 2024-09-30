@@ -6,7 +6,7 @@ using UserService.RequestController.Model;
 
 namespace UserService.RequestController;
 
-internal class AddController(ICompression compression): IRequestController
+internal class AddController(): IRequestController
 {
     public async Task Handle(ControllerContext ctx)
     {
@@ -18,8 +18,8 @@ internal class AddController(ICompression compression): IRequestController
             var body = ctx.Request.Body;
             
             if(body is null) throw new NullReferenceException("Body is null");
-            var compressed = await compression.Compress(body);
-            await ctx.Storage.AddObject(ctx.Request.Id, compressed);
+
+            await ctx.Storage.AddObject(ctx.Request.Id, body);
         }
         catch (Exception ex)
         {
