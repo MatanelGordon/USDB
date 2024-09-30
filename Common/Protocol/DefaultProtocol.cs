@@ -1,5 +1,5 @@
-﻿using Common.Protocol.Abstraction;
-using System.IO.Hashing;
+﻿using System.IO.Hashing;
+using Common.Protocol.Abstraction;
 namespace Common.Protocol;
 
 public class DefaultProtocol : IProtocol

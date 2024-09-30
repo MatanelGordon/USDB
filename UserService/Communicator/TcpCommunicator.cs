@@ -1,9 +1,9 @@
-﻿using Common.Models;
+﻿using System.Net;
+using System.Net.Sockets;
+using Common.Models;
 using Common.Protocol.Abstraction;
 using Common.Serializer.Abstraction;
 using Microsoft.Extensions.Options;
-using System.Net;
-using System.Net.Sockets;
 using UserService.Communicator.Abstraction;
 using UserService.Communicator.Model;
 using UserService.Config;

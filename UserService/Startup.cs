@@ -1,9 +1,9 @@
-﻿using UserService.Communicator.Abstraction;
-using UserService.RequestController;
-using UserService.Storage.Abstraction;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
+using UserService.Communicator.Abstraction;
 using UserService.RegisterService.Abstraction;
+using UserService.RequestController;
 using UserService.RequestController.Model;
+using UserService.Storage.Abstraction;
 
 namespace UserService;
 

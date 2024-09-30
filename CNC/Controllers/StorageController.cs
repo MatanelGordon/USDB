@@ -1,11 +1,11 @@
 ﻿using System.Net;
-using CNC.Services;
-using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.RegularExpressions;
 using CNC.Communicators.Abstraction;
+using CNC.Services;
 using Common.Compression.Abstraction;
 using Common.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CNC.Controllers;
 

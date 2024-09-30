@@ -1,8 +1,8 @@
-﻿using CNC.Communicators.Abstraction;
+﻿using System.Net.Sockets;
+using CNC.Communicators.Abstraction;
 using CNC.Communicators.Models;
 using CNC.Services;
 using Common.Models;
-using System.Net.Sockets;
 using Common.Protocol.Abstraction;
 using Common.Serializer.Abstraction;
 

@@ -1,6 +1,6 @@
-﻿using UserService.Storage.Abstraction;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using UserService.Config;
+using UserService.Storage.Abstraction;
 
 namespace UserService.Storage;
 
