@@ -1,5 +1,6 @@
 using CNC.Communicators;
 using CNC.Communicators.Abstraction;
+using CNC.Config;
 using CNC.Services;
 using Common.Compression;
 using Common.Compression.Abstraction;
@@ -16,6 +17,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var compressionConfig = builder.Configuration.GetSection("Compression");
+builder.Services.Configure<CompressionConfigSchema>(compressionConfig);
+
 builder.Services.AddSingleton<UsersStorageService>();
 builder.Services.AddSingleton<IProtocol, DefaultProtocol>();
 builder.Services.AddSingleton<ISerializer, JsonSerializer>();
