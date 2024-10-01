@@ -3,15 +3,19 @@ using UserService.Communicator.Abstraction;
 using UserService.RegisterService.Abstraction;
 using UserService.RequestController;
 using UserService.RequestController.Model;
+using UserService.Storage;
 using UserService.Storage.Abstraction;
 
 namespace UserService;
 
-internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage, IRegisterService registerService) : IHostedService
+internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage, IRegisterService registerService, FileStorage fileStorage) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Started Startup Service");
+
+        Console.WriteLine("Loading Pre-existing files into storage");
+        fileStorage.LoadExisting();
 
         communicator.OnRequest += payload =>
         {
@@ -35,4 +39,6 @@ internal class Startup(ICommunicator communicator, MainController mainController
         Console.WriteLine("OK, Goodbye");
         return Task.CompletedTask;
     }
+    
+    
 }

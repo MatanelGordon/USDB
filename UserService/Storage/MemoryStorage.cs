@@ -36,6 +36,8 @@ internal class MemoryStorage(long limit) : IStorage
         return Task.FromResult(true);
     }
 
+    public Task<bool> ObjectExists(string id) => Task.FromResult(_storage.ContainsKey(id));
+
     public Task<byte[]?> GetObject(string id)
     {
         _storage.TryGetValue(id, out var result);

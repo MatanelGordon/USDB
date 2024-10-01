@@ -4,8 +4,9 @@ namespace UserService.Storage;
 
 internal class FileStorage(string directory, int sizeLimit) : IStorage
 {
-    public long Size { get; private set; }
-
+    protected long Size { get; private set; }
+    protected List<string> Files { get; } = new();
+    
     public async Task<bool> AddObject(string id, byte[] data, bool shouldOverride = false)
     {
         var sizeLimitBytes = (long) sizeLimit * 1_000_000;
@@ -29,6 +30,7 @@ internal class FileStorage(string directory, int sizeLimit) : IStorage
 
         Size += data.Length;
         await file.WriteAsync(data);
+        Files.Add(id);
 
         return true;
     }
@@ -39,8 +41,9 @@ internal class FileStorage(string directory, int sizeLimit) : IStorage
         {
             var fullPath = Path.Combine(Path.GetFullPath(directory), $"{id}.bin");
             using var file = File.Open(fullPath, FileMode.Open);
-            Size -= file.Length;
             File.Delete(fullPath);
+            Size -= file.Length;
+            Files.Remove(id);
             return Task.FromResult(true);
         }
         catch (Exception _)
@@ -48,6 +51,8 @@ internal class FileStorage(string directory, int sizeLimit) : IStorage
             return Task.FromResult(false);
         }
     }
+
+    public Task<bool> ObjectExists(string id) => Task.Run(() => Files.Contains(id));
 
     public void Dispose()
     {
@@ -57,7 +62,8 @@ internal class FileStorage(string directory, int sizeLimit) : IStorage
         {
             File.Delete(file);
         }
-
+        
+        Files.Clear();
         Size = 0;
     }
 
@@ -69,10 +75,33 @@ internal class FileStorage(string directory, int sizeLimit) : IStorage
         if (!isExists) return null;
 
         await using var file = File.OpenRead(fullPath);
-        using var memstream = new MemoryStream();
+        await using var memstream = new MemoryStream();
 
         await file.CopyToAsync(memstream);
 
         return memstream.ToArray();
+    }
+
+    public void LoadExisting()
+    {
+        var files = Directory.GetFiles(Path.GetFullPath(directory));
+        var totalSize = 0L;
+        
+        foreach (var path in files)
+        {
+            var info = new FileInfo(path);
+            totalSize += info.Length;
+        }
+
+        if (totalSize <= sizeLimit)
+        {
+            Size += totalSize;
+            return;
+        }
+
+        foreach (var file in files)
+        {
+            File.Delete(file);
+        }
     }
 }
