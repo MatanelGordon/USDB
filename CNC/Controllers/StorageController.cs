@@ -50,6 +50,40 @@ public class StorageController(UsersStorageService usersStorageService, ICommuni
         return File(result.Content, "application/octet-stream", $"{result.Id}.{compression.Extension}");
     }
 
+    [HttpPost("{user}")]
+    public async Task<IActionResult> Add(string user)
+    {
+        var id = Guid.NewGuid().ToString();
+        
+        if (!usersStorageService.Exists(user))
+        {
+            return NotFound($"User {user} was not found");
+        }
+        
+        await using var memory = new MemoryStream();
+        await Request.Body.CopyToAsync(memory);
+        var payload = memory.ToArray();
+
+        var request = new RequestSchema()
+        {
+            Method = RequestMethod.ADD,
+            Id = id,
+            From = Dns.GetHostName(),
+            Body = payload,
+        };
+
+        var response = await communicator.MakeRequest(user, request);
+
+        if (response.ResponseStatus != ResponseStatus.Success)
+        {
+            var message = Encoding.UTF8.GetString(response.Content);
+
+            return StatusCode(500, $"ResponseSchemaError: {message}");
+        }
+        
+        return Ok(id);
+    }
+
     private void Log(string message)
     {
         var now = DateTime.Now;
