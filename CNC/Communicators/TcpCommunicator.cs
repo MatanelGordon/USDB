@@ -8,7 +8,7 @@ using Common.Serializer.Abstraction;
 
 namespace CNC.Communicators;
 
-public class TcpCommunicator(UsersStorageService userStorage, ISerializer serializer, IProtocol protocol) : ICommunicator
+public class TcpCommunicator(UsersStorageService userStorage, ISerializer serializer, IProtocol protocol, ILogger<TcpCommunicator> logger) : ICommunicator
 {
     private readonly Dictionary<string, TcpClient> _openConnections = new ();
 
@@ -43,9 +43,10 @@ public class TcpCommunicator(UsersStorageService userStorage, ISerializer serial
         var connection = userStorage.GetRequiredHostByUser(user);
 
         TcpClient client = new TcpClient();
-
+        
+        logger.LogInformation($"Connecting to {user}@{connection.Host}:{connection.Port}");
         await client.ConnectAsync(connection.Host, connection.Port);
-
+        logger.LogInformation($"User {user} Connected Successfully");
         _openConnections.Add(user, client);
 
         return client;

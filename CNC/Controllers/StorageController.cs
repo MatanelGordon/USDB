@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CNC.Controllers;
 
 [ApiController]
-[Route("Api/Object/[controller]")]
+[Route("Api/[controller]")]
 public class StorageController(UsersStorageService usersStorageService, ICommunicator communicator, ICompression compression, ILogger<StorageController> logger)
     : ControllerBase
 {
@@ -45,7 +45,7 @@ public class StorageController(UsersStorageService usersStorageService, ICommuni
             return StatusCode(500, $"ResponseSchemaError: {message}");
         }
         
-        // TODO: Add Decompression and MimeType Checker for Json XML and UTF8 and UTF16.        
+        // TODO: Add Decompression and MimeType Checker for Json XML and UTF8 and UTF16.
         Log("Run Succeed");
         return File(result.Content, "application/octet-stream", $"{result.Id}.{compression.Extension}");
     }
@@ -81,7 +81,8 @@ public class StorageController(UsersStorageService usersStorageService, ICommuni
             return StatusCode(500, $"ResponseSchemaError: {message}");
         }
         
-        return Ok(id);
+        Log($"Added Item - {user}/{id} ");
+        return Ok(new {Id= id});
     }
 
     private void Log(string message)

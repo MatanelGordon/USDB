@@ -27,19 +27,26 @@ internal class StorageRouter
     {
     }
 
-    public Task<bool> AddObject(string id, byte[] data, bool shouldOverride)
+    public async Task<bool> AddObject(string id, byte[] data, bool shouldOverride)
     {
         IStorage storage = data.Length > _switchLimit ? _fileStorage : _memoryStorage;
 
         try
         {
-            return storage.AddObject(id, data);
+            var result = await storage.AddObject(id, data);
+            Console.WriteLine($"Added Object {id} [{data.Length}B] ({storage.GetType().Name})");
+            return result;
         }
         catch (Exception _)
         {
+
             IStorage other = storage == _fileStorage ? _memoryStorage : _fileStorage;
 
-            return other.AddObject(id, data);
+            Console.WriteLine($"Added {id} [{data.Length}B] FAILED! Storing in opposite storage ({other.GetType().Name})");
+            var result = await other.AddObject(id, data);
+            Console.WriteLine($"Added Object {id} [{data.Length}B]");
+
+            return result;
         }
     }
 
