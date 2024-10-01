@@ -85,6 +85,30 @@ public class StorageController(UsersStorageService usersStorageService, ICommuni
         return Ok(new {Id= id});
     }
 
+    [HttpDelete("{user}/{id}")]
+    public async Task<IActionResult> Delete(string user, string id)
+    {
+        var request = new RequestSchema()
+        {
+            Method = RequestMethod.DELETE,
+            Id = id,
+            From = Dns.GetHostName(),
+            Body = null,
+        };
+
+        var response = await communicator.MakeRequest(user, request);
+
+        if (response.ResponseStatus != ResponseStatus.Success)
+        {
+            var message = Encoding.UTF8.GetString(response.Content);
+
+            return StatusCode(500, $"ResponseSchemaError: {message}");
+        }
+        
+        Log($"Deleted Item - {user}/{id} ");
+        return Ok(new {Id= id});
+    }
+
     private void Log(string message)
     {
         var now = DateTime.Now;
