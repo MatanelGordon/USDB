@@ -8,14 +8,11 @@ using UserService.Storage.Abstraction;
 
 namespace UserService;
 
-internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage, IRegisterService registerService, FileStorage fileStorage) : IHostedService
+internal class Startup(ICommunicator communicator, MainController mainController, IStorage storage, IRegisterService registerService) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Started Startup Service");
-
-        Console.WriteLine("Loading Pre-existing files into storage");
-        fileStorage.LoadExisting();
 
         communicator.OnRequest += payload =>
         {

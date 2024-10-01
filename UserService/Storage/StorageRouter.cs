@@ -4,9 +4,22 @@ using UserService.Storage.Abstraction;
 
 namespace UserService.Storage;
 
-internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorage, long switchLimit = 2_500_000)
+internal class StorageRouter
     : IStorage
 {
+    private readonly FileStorage _fileStorage;
+    private readonly MemoryStorage _memoryStorage;
+    private readonly long _switchLimit;
+    
+    public StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorage, long switchLimit = 2_500_000)
+    {
+        _fileStorage = fileStorage;
+        _memoryStorage = memoryStorage;
+        _switchLimit = switchLimit;
+        
+        _fileStorage.LoadExisting();
+    }
+    
     public StorageRouter(IOptions<DBConfigSchema> config, long switchLimit = 2_500_000) : this(
         new FileStorage(config.Value.Directory, config.Value.Limit),
         new MemoryStorage(config.Value.MemoryStorageLimit),
@@ -16,7 +29,7 @@ internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorag
 
     public Task<bool> AddObject(string id, byte[] data, bool shouldOverride)
     {
-        IStorage storage = data.Length > switchLimit ? fileStorage : memoryStorage;
+        IStorage storage = data.Length > _switchLimit ? _fileStorage : _memoryStorage;
 
         try
         {
@@ -24,7 +37,7 @@ internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorag
         }
         catch (Exception _)
         {
-            IStorage other = storage == fileStorage ? memoryStorage : fileStorage;
+            IStorage other = storage == _fileStorage ? _memoryStorage : _fileStorage;
 
             return other.AddObject(id, data);
         }
@@ -40,8 +53,8 @@ internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorag
     {
         var storagesSearches = new List<Task<bool>>
         {
-            fileStorage.ObjectExists(id),
-            memoryStorage.ObjectExists(id)
+            _fileStorage.ObjectExists(id),
+            _memoryStorage.ObjectExists(id)
         };
 
         while (storagesSearches.Any())
@@ -64,14 +77,14 @@ internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorag
 
     public void Dispose()
     {
-        fileStorage.Dispose();
-        memoryStorage.Dispose();
+        _fileStorage.Dispose();
+        _memoryStorage.Dispose();
     }
 
     private async Task<IStorage> GetStorageById(string id)
     {
-        var isMemoryStored = memoryStorage.ObjectExists(id);
-        var isFileStored = fileStorage.ObjectExists(id);
+        var isMemoryStored = _memoryStorage.ObjectExists(id);
+        var isFileStored = _fileStorage.ObjectExists(id);
         var searches = new List<Task<bool>>
         {
             isFileStored,
@@ -86,7 +99,7 @@ internal class StorageRouter(FileStorage fileStorage, MemoryStorage memoryStorag
             
             if (result)
             {
-                return first == isMemoryStored ? memoryStorage : fileStorage;
+                return first == isMemoryStored ? _memoryStorage : _fileStorage;
             }
         }
         
